@@ -1,0 +1,11 @@
+.env
+*.log
+__pycache__/
+*.pyc
+.venv/
+venv/
+config/gateway.conf
+config/xray/*.json
+!config/xray/relay.example.json
+node_modules/
+.DS_Store
