@@ -1,0 +1,63 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install linters
+        run: pip install ruff
+      - name: Ruff (Python)
+        run: ruff check backend monitoring
+      - name: ShellCheck (Bash)
+        run: |
+          sudo apt-get update && sudo apt-get install -y shellcheck
+          shellcheck scripts/*.sh
+
+  test:
+    needs: lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install deps
+        run: pip install -r backend/requirements.txt pytest
+      - name: Run tests
+        run: python -m pytest -q
+
+  deploy-staging:
+    needs: test
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment: staging
+    steps:
+      - uses: actions/checkout@v4
+      - name: Deploy to staging
+        run: ./scripts/deploy.sh staging
+        env:
+          SSH_KEY: ${{ secrets.STAGING_SSH_KEY }}
+          HOSTS: ${{ secrets.STAGING_HOSTS }}
+
+  deploy-prod:
+    needs: deploy-staging
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment: production   # требует ручного подтверждения (protection rule)
+    steps:
+      - uses: actions/checkout@v4
+      - name: Rolling deploy to prod
+        run: ./scripts/deploy.sh prod
+        env:
+          SSH_KEY: ${{ secrets.PROD_SSH_KEY }}
+          HOSTS: ${{ secrets.PROD_HOSTS }}
