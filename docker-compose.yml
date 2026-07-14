@@ -1,0 +1,58 @@
+# Санитизированный локальный стенд: балансировщик + relay-узлы + backend + мониторинг.
+# Реальные значения (ключи, домены, UUID) вынесены в .env и сюда НЕ коммитятся.
+services:
+  gateway:
+    image: nginx:1.27-alpine
+    container_name: drp-gateway
+    ports:
+      - "8080:80"
+    volumes:
+      - ./config/gateway.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - relay-1
+      - relay-2
+    restart: unless-stopped
+
+  relay-1: &relay
+    image: teddysun/xray:latest
+    container_name: drp-relay-1
+    volumes:
+      - ./config/xray/relay.example.json:/etc/xray/config.json:ro
+    restart: unless-stopped
+
+  relay-2:
+    <<: *relay
+    container_name: drp-relay-2
+
+  backend:
+    build: ./backend
+    container_name: drp-backend
+    env_file: .env
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    restart: unless-stopped
+
+  db:
+    image: postgres:16-alpine
+    container_name: drp-db
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  monitoring:
+    build: ./monitoring
+    container_name: drp-monitoring
+    env_file: .env
+    depends_on:
+      - relay-1
+      - relay-2
+    restart: unless-stopped
+
+volumes:
+  pgdata:
