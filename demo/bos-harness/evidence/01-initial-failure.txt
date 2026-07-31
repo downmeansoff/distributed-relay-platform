@@ -1,0 +1,20 @@
+Initial verifier result
+=======================
+
+Command:
+python -m pytest -q
+
+Observed result before timeout isolation:
+
+....F                                                                    [100%]
+
+FAILED tests/test_health.py::test_slow_optional_probe_times_out_and_degrades
+AssertionError: assert 'healthy' == 'degraded'
+
+Summary:
+1 failed, 4 passed
+
+Interpretation:
+The original direct-call design waited for the slow optional probe and then
+accepted its late success. The implementation did not enforce the declared
+probe timeout, so the planner added timeout isolation and a regression task.
