@@ -9,11 +9,12 @@ from __future__ import annotations
 import json
 import os
 import time
-from concurrent.futures import ThreadPoolExecutor, TimeoutError as FutureTimeoutError
+from collections.abc import Callable, Iterable
+from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import TimeoutError as FutureTimeoutError
 from dataclasses import asdict, dataclass
 from enum import Enum
 from http.server import BaseHTTPRequestHandler, HTTPServer
-from typing import Callable, Iterable
 
 APP_ENV = os.getenv("APP_ENV", "local")
 
@@ -133,7 +134,7 @@ def default_probes() -> list[ProbeSpec]:
 
 
 class Handler(BaseHTTPRequestHandler):
-    def do_GET(self) -> None:  # noqa: N802 - stdlib callback name
+    def do_GET(self) -> None:
         if self.path == "/health":
             code, payload = aggregate_health(default_probes())
             self._json(code, payload)
