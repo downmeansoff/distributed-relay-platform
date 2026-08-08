@@ -2,7 +2,7 @@
 
 ## Multi-Platform Product · Go Control Plane · Distributed Infrastructure · AgentOps
 
-A **sanitized architecture reference** for a production multi-platform network product used by **1,000+ users** across **7 infrastructure nodes** and **5 client channels**: web, Android, iOS, Telegram, and external clients.
+A **sanitized architecture reference** for a production multi-platform network product used by **3,000+ users** across **7 infrastructure nodes** and **5 client channels**: web, Android, iOS, Telegram, and external clients.
 
 The private production system combines mobile applications, shared backend contracts, a **Go control plane**, PostgreSQL, account and device management, entitlements, billing flows, usage enforcement, telemetry, distributed VLESS/Xray infrastructure, CI/CD, observability, and an AI-assisted engineering workflow.
 
