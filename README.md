@@ -6,9 +6,11 @@ A **sanitized architecture reference** for a production multi-platform network p
 
 The private production system combines mobile applications, shared backend contracts, a **Go control plane**, PostgreSQL, account and device management, entitlements, billing flows, usage enforcement, telemetry, distributed VLESS/Xray infrastructure, CI/CD, observability, and an AI-assisted engineering workflow.
 
+The production control plane is written in Go. This sanitized reference reimplements the same control loop in Python so that it can be read and run without the private stack.
+
 > This repository is intentionally not a source dump of the commercial system. Customer data, credentials, private domains, production hosts, billing integrations, mobile source code, proprietary business logic, and operational access paths are omitted.
 
-![Users](https://img.shields.io/badge/Production_users-1000%2B-22C55E)
+![Users](https://img.shields.io/badge/Production_users-3000%2B-22C55E)
 ![Nodes](https://img.shields.io/badge/Infrastructure_nodes-7-3B82F6)
 ![Clients](https://img.shields.io/badge/Client_channels-5-0EA5E9)
 ![Go](https://img.shields.io/badge/Production_control_plane-Go-00ADD8?logo=go&logoColor=white)

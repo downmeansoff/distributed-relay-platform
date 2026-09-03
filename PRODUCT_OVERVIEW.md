@@ -4,7 +4,7 @@ This document describes the product and engineering scope of the private product
 
 ## Product summary
 
-The platform is a multi-client network product used by **1,000+ users** across **7 production infrastructure nodes** and **5 client channels**:
+The platform is a multi-client network product used by **3,000+ users** across **7 production infrastructure nodes** and **5 client channels**:
 
 - web;
 - Android;
@@ -97,7 +97,7 @@ Health checks, telemetry, structured logs, audit events, and support metadata ma
 
 ## Business value
 
-- supported growth to 1,000+ users through one centrally controlled product architecture;
+- supported growth to 3,000+ users through one centrally controlled product architecture;
 - reduced duplication across web, Android, iOS, Telegram, and external clients;
 - improved release safety through staging, smoke checks, rolling rollout, and rollback;
 - shortened incident diagnosis through stable contracts, health data, telemetry, and evidence collection;
