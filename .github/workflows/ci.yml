@@ -36,9 +36,10 @@ jobs:
       - name: Run tests
         run: python -m pytest -q
 
+  # Deploy jobs need real hosts: set repo variable DEPLOY_ENABLED=true plus STAGING_/PROD_ secrets.
   deploy-staging:
     needs: test
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main' && vars.DEPLOY_ENABLED == 'true'
     runs-on: ubuntu-latest
     environment: staging
     steps:
@@ -51,7 +52,7 @@ jobs:
 
   deploy-prod:
     needs: deploy-staging
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main' && vars.DEPLOY_ENABLED == 'true'
     runs-on: ubuntu-latest
     environment: production   # требует ручного подтверждения (protection rule)
     steps:
